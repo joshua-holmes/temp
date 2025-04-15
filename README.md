@@ -2,6 +2,18 @@
 
 Hi! I have included Python code and C++ code to demonstrate the problem with the code in the video. For each language, I have implemented the function from the video, followed by a corrected function. It's only 3-4 lines of code that makes the algorithm incorrect.
 
+## Running the Examples
+
+I've included examples to read/run.
+
+### C++
+
+Just run `make`. I have configured the makefile to compile/link, run the binary, then clean up the binary.
+
+### Python
+
+Run `python3 ./src/main.py`.
+
 ## Breakdown
 
 The input used in the video was `"ABCAB"`. The video _does_ give us the correct answer of `"ABC"`.
@@ -141,13 +153,3 @@ At the beginning of the block, `longestTillNow` is `"BCA"`. We continue with `D`
 | 3 | ('B', 'C', 'A')      | "BCA"          | "ABC"          | <-- fixed
 | 4 | ('B', 'C', 'A', 'D') | "BCAD"         | "BCAD"         |
 ```
-
-## Running the Examples
-
-### C++
-
-Just run `make`. I have configured the makefile to compile/link, run the binary, then clean up the binary.
-
-### Python
-
-Run `python3 ./src/main.py`.
