@@ -207,7 +207,7 @@ So we could replace the use of `.substr()` and lob off the first character like 
 longestTillNowBeg += 1;
 ```
 
-...and return the substring at the end of the function like so (the way I did it, the indices would be inclusive):
+...and return the substring at the end of the function like so:
 ```cpp
-return input.substr(longestOverallBeg, longestOverallEnd + 1);
+return input.substr(longestOverallBeg, longestOverallEnd);
 ```
