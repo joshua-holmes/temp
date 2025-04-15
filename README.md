@@ -4,9 +4,9 @@ Hi! I have included Python code and C++ code to demonstrate the problem with the
 
 ## Breakdown
 
-The input used in the video was `"ABCAB"`, which has a longest non-repeating substring of `"ABC"`.
+The input used in the video was `"ABCAB"`. The video _does_ give us the correct answer of `"ABC"`.
 
-However, I would like to use a different input for this example, `"ABCAD"`. While `"ABC"` is a substring, it's not the longest. `"BCAD"` (last 4 chars) is the longest. Using the algorithm from the video, however, gives us the incorrect answer of `"ABC"`. Here is how.
+However, I would like to use a different input for this example, `"ABCAD"`. While `"ABC"` is a substring, it's not the longest. `"BCAD"` (last 4 chars) is the longest. Using the algorithm from the video, along with my new input, gives us the incorrect answer of `"ABC"`. Here is how.
 
 <img src="./images/screenshot.png" />
 
@@ -19,7 +19,7 @@ Let's iterate through the for loop and I will keep track of state for us. Rememb
 Our char is `A` and `set` is empty, so no repeating chars are found. We append `A` to `longestTillNow`, add it to `set`, and set `longestOverall = longestTillNow`.
 
 ```
-| i | set             | longestTillNow | longestOverall |
+| i | set (unordered) | longestTillNow | longestOverall |
 |---|-----------------|----------------|----------------|
 | 0 | ('A')           | "A"            | "A"            | 
 ```
@@ -29,7 +29,7 @@ Our char is `A` and `set` is empty, so no repeating chars are found. We append `
 Same as first
 
 ```
-| i | set             | longestTillNow | longestOverall |
+| i | set (unordered) | longestTillNow | longestOverall |
 |---|-----------------|----------------|----------------|
 | 1 | ('A', 'B')      | "AB"           | "AB"           | 
 | 2 | ('A', 'B', 'C') | "ABC"          | "ABC"          |
@@ -37,7 +37,7 @@ Same as first
 
 #### 4th iteration
 
-At the beginning of the block, `set` is `('A', 'B', 'C')`. Our current char is `A` again. We check if `A` is in `set` and it is!
+At the beginning of the block, `set` is still `('A', 'B', 'C')`. Our current char is `A` again. We check if `A` is in `set` and it is!
 
 So we _erase_ `set` and `longestTillNow` 😱
 
@@ -48,10 +48,10 @@ if (set.contains(c)) {
 }
 ```
 
-This is a problem, because `longestTillNow` is `"ABC"` we know the correct answer contains the `B` and `C` from that. Now our longest overall is `"ABC"`, `set` and `longestTillNow` are empty, then we populate them with the new `A` char.
+This is a problem, because `longestTillNow` is `"ABC"` we know the correct answer contains the `B` and `C` from that. Now our `longestOverall` is `"ABC"`, `set` and `longestTillNow` are empty, then we populate them with the new `A` char.
 
 ```
-| i | set             | longestTillNow | longestOverall |
+| i | set (unordered) | longestTillNow | longestOverall |
 |---|-----------------|----------------|----------------|
 | 3 | ('A')           | "A"            | "ABC"          | <-- problem
 ```
@@ -61,7 +61,7 @@ This is a problem, because `longestTillNow` is `"ABC"` we know the correct answe
 Last, we handle `D` the same way we handled the first 3 iterations, leaving us with `longestTillNow -> "AD"` and importantly `longestOverall -> "ABC"`.
 
 ```
-| i | set             | longestTillNow | longestOverall |
+| i | set (unordered) | longestTillNow | longestOverall |
 |---|-----------------|----------------|----------------|
 | 4 | ('A', 'D')      | "AD"           | "ABC"          |
 ```
@@ -71,7 +71,7 @@ Last, we handle `D` the same way we handled the first 3 iterations, leaving us w
 Because we erased 2 of the characters from `longestTillNow` that should have been in the final answer, we never arrived at the correct answer of `"BCAD"`.
 
 ```
-| i | set             | longestTillNow | longestOverall |
+| i | set (unordered) | longestTillNow | longestOverall |
 |---|-----------------|----------------|----------------|
 | 0 | ('A')           | "A"            | "A"            | 
 | 1 | ('A', 'B')      | "AB"           | "AB"           | 
