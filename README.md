@@ -6,6 +6,8 @@ Hi! I have included Python code and C++ code to demonstrate the problem with the
 
 I've included examples to read/run.
 
+<img src="./images/example.png" />
+
 ### C++
 
 Just run `make`. I have configured the makefile to compile/link, run the binary, then clean up the binary.
