@@ -155,3 +155,38 @@ At the beginning of the block, `longestTillNow` is `"BCA"`. We continue with `D`
 | 3 | ('B', 'C', 'A')      | "BCA"          | "ABC"          | <-- fixed
 | 4 | ('B', 'C', 'A', 'D') | "BCAD"         | "BCAD"         |
 ```
+
+## Further Optimizations
+
+In the new code, when we lob off the first character:
+
+```cpp
+longestTillNow = longestTillNow.substr(1);
+```
+
+...we are allocating all new memory with `.substr()`. The old memory is automatically freed, _however_, allocating memory from the heap requires syscalls, which are always _very_ slow.
+
+We can avoid this by tracking `longestTillNow` and `longestOverall` substrings using indices instead of allocating a new buffer to store them. For example, instead of:
+```cpp
+std::string longestOverall = "";
+std::string longestTillNow = "";
+```
+
+...we could do:
+
+```cpp
+int longestOverallBeg = 0;
+int longestOverallEnd = 0;
+int longestTillNowBeg = 0;
+int longestTillNowEnd = 0;
+```
+
+The way I did it, the indices would be inclusive, so we could calculate length like so:
+```cpp
+int longestOverallLen = longestOverallEnd - longestOverallBeg + 1;
+```
+
+...and return the substring at the end of the function like so:
+```cpp
+return input.substr(longestOverallBeg, longestOverallEnd + 1);
+```
