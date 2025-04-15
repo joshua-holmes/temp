@@ -16,13 +16,33 @@ Just run `make`. I have configured the makefile to compile/link, run the binary,
 
 Run `python3 ./src/main.py`.
 
+## Short Version
+
+In the for loop, this ([line 17](./src/main.cpp#L17)):
+
+```cpp
+if (set.contains(c)) {
+    longestTillNow = "";
+    set.clear();
+}
+```
+
+...needs to be replaced with this ([line 41](./src/main.cpp#L41)):
+
+```cpp
+while (set.contains(c)) {
+    set.erase(longestTillNow[0]);
+    longestTillNow = longestTillNow.substr(1);
+}
+```
+
 ## Breakdown
+
+<img src="./images/screenshot.png" />
 
 The input used in the video was `"ABCAB"`. The video _does_ give us the correct answer of `"ABC"`.
 
 However, I would like to use a different input for this example, `"ABCAD"`. While `"ABC"` is a substring, it's not the longest. `"BCAD"` (last 4 chars) is the longest. Using the algorithm from the video, along with my new input, gives us the incorrect answer of `"ABC"`. Here is how.
-
-<img src="./images/screenshot.png" />
 
 ## Problem
 
@@ -166,7 +186,8 @@ longestTillNow = longestTillNow.substr(1);
 
 ...we are allocating all new memory with `.substr()`. The old memory is automatically freed, _however_, allocating memory from the heap requires syscalls, which are always _very_ slow.
 
-We can avoid this by tracking `longestTillNow` and `longestOverall` substrings using indices instead of allocating a new buffer to store them. For example, instead of:
+We can avoid this by tracking `longestTillNow` and `longestOverall` substrings using indices instead of allocating new buffers to store them. For example, instead of:
+
 ```cpp
 std::string longestOverall = "";
 std::string longestTillNow = "";
@@ -181,12 +202,12 @@ int longestTillNowBeg = 0;
 int longestTillNowEnd = 0;
 ```
 
-The way I did it, the indices would be inclusive, so we could calculate length like so:
+So we could replace the use of `.substr()` and lob off the first character like so:
 ```cpp
-int longestOverallLen = longestOverallEnd - longestOverallBeg + 1;
+longestTillNowBeg += 1;
 ```
 
-...and return the substring at the end of the function like so:
+...and return the substring at the end of the function like so (the way I did it, the indices would be inclusive):
 ```cpp
 return input.substr(longestOverallBeg, longestOverallEnd + 1);
 ```
